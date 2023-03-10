@@ -91,17 +91,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\EntriesController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\StoresController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BaseResponse.cs" />
-    <Compile Include="Models\DeleteStoreResponse.cs" />
-    <Compile Include="Models\PostStoreResponse.cs" />
-    <Compile Include="Models\GetStoreResponse.cs" />
-    <Compile Include="Models\PutStoreDto.cs" />
-    <Compile Include="Models\PutStoreResponse.cs" />
-    <Compile Include="Models\CreateStoreDto.cs" />
+    <Compile Include="Models\Entries\CreateEntryDto.cs" />
+    <Compile Include="Models\Entries\CreateEntryResponse.cs" />
+    <Compile Include="Models\IsoDateConverter.cs" />
+    <Compile Include="Models\Statistics\GetStatisticsResponse.cs" />
+    <Compile Include="Models\Statistics\Statistic.cs" />
+    <Compile Include="Models\Stores\DeleteStoreResponse.cs" />
+    <Compile Include="Models\Stores\PostStoreResponse.cs" />
+    <Compile Include="Models\Stores\GetStoreResponse.cs" />
+    <Compile Include="Models\Stores\PutStoreDto.cs" />
+    <Compile Include="Models\Stores\PutStoreResponse.cs" />
+    <Compile Include="Models\Stores\CreateStoreDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

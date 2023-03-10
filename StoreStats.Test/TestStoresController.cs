@@ -90,7 +90,6 @@ namespace StoreStatsApi.Test
             var item = GetPutStoreDto();
             controller.ModelState.AddModelError("test", "test");
 
-
             var result = await controller.PutStore(4, item) as InvalidModelStateResult;
 
             Assert.IsNotNull(result);
@@ -120,8 +119,7 @@ namespace StoreStatsApi.Test
             var result = await controller.PostStore(item) as CreatedAtRouteNegotiatedContentResult<PostStoreResponse>;
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(CreatedAtRouteNegotiatedContentResult<PostStoreResponse>));
-            
+            Assert.IsInstanceOfType(result, typeof(CreatedAtRouteNegotiatedContentResult<PostStoreResponse>));      
         }
 
         [TestMethod]

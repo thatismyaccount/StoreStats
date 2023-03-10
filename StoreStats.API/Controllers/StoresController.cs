@@ -12,7 +12,6 @@ using System.Web.Http.Description;
 
 namespace StoreStats.API.Controllers
 {
-    [RoutePrefix("api/store")]
     public class StoresController : ApiController
     {
         private readonly IStoreStatsDbContext db = new StoreStatsDbContext();
@@ -88,7 +87,7 @@ namespace StoreStats.API.Controllers
             db.Stores.Add(dbStore);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = dbStore.Id }, new PostStoreResponse(dbStore));
+            return CreatedAtRoute("Stores", new { id = dbStore.Id }, new PostStoreResponse(dbStore));
         }
 
         // DELETE: api/store/5
