@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,5 +19,6 @@ namespace StoreStats.Data.Models
         void MarkAsModified(Store item);
         void MarkAsModified(Entry item);
         void Dispose();
+        void LoadEntriesForStore(Store store, DateTime startDate, DateTime endDate);
     }
 }
