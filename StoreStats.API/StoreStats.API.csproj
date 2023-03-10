@@ -99,8 +99,9 @@
     <Compile Include="Models\DeleteStoreResponse.cs" />
     <Compile Include="Models\PostStoreResponse.cs" />
     <Compile Include="Models\GetStoreResponse.cs" />
+    <Compile Include="Models\PutStoreDto.cs" />
     <Compile Include="Models\PutStoreResponse.cs" />
-    <Compile Include="Models\StoreDto.cs" />
+    <Compile Include="Models\CreateStoreDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using StoreStats.Data.Models;
+﻿using StoreStats.API.Models;
+using StoreStats.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -25,7 +26,7 @@ namespace StoreStats.API.Controllers
         }
 
         // GET: api/store/5
-        [ResponseType(typeof(Store))]
+        [ResponseType(typeof(GetStoreResponse))]
         public async Task<IHttpActionResult> GetStore(int id)
         {
             Store store = await db.Stores.FindAsync(id);
@@ -34,12 +35,12 @@ namespace StoreStats.API.Controllers
                 return NotFound();
             }
 
-            return Ok(store);
+            return Ok(new GetStoreResponse(store));
         }
 
         // PUT: api/store/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutStore(int id, Store store)
+        public async Task<IHttpActionResult> PutStore(int id, PutStoreDto store)
         {
             if (!ModelState.IsValid)
             {
@@ -51,7 +52,9 @@ namespace StoreStats.API.Controllers
                 return BadRequest();
             }
 
-            db.MarkAsModified(store);
+            var dbStore = store.ToStore();
+
+            db.MarkAsModified(dbStore);
 
             try
             {
@@ -69,26 +72,27 @@ namespace StoreStats.API.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(new PutStoreResponse(dbStore));
         }
 
         // POST: api/store
-        [ResponseType(typeof(Store))]
-        public async Task<IHttpActionResult> PostStore(StoreDto store)
+        [ResponseType(typeof(PostStoreResponse))]
+        public async Task<IHttpActionResult> PostStore(CreateStoreDto store)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
             var dbStore = store.ToStore();
             db.Stores.Add(dbStore);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = dbStore.Id }, dbStore);
+            return CreatedAtRoute("DefaultApi", new { id = dbStore.Id }, new PostStoreResponse(dbStore));
         }
 
         // DELETE: api/store/5
-        [ResponseType(typeof(Store))]
+        [ResponseType(typeof(DeleteStoreResponse))]
         public async Task<IHttpActionResult> DeleteStore(int id)
         {
             Store store = await db.Stores.FindAsync(id);
@@ -100,7 +104,7 @@ namespace StoreStats.API.Controllers
             db.Stores.Remove(store);
             await db.SaveChangesAsync();
 
-            return Ok(store);
+            return Ok(new DeleteStoreResponse(store));
         }
 
         protected override void Dispose(bool disposing)
