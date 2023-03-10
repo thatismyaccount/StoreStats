@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StoreStats.API.Controllers;
+using StoreStats.API.Models;
 using StoreStats.Data.Models;
 using StoreStatsApi.Test.Contexts;
 using System;
@@ -20,7 +21,7 @@ namespace StoreStatsApi.Test
             var controller = new StoresController(testDbContext);
 
             var result = await controller.GetStore(1);
-            Assert.IsInstanceOfType(result, typeof(OkResult));
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<GetStoreResponse>));
         }
 
         [TestMethod]
@@ -38,16 +39,28 @@ namespace StoreStatsApi.Test
             var controller = new StoresController(GetTestDbContext());
             var item = GetTestStore();
 
-            var result = await controller.PutStore(3, item) as StatusCodeResult;
+            var result = await controller.PutStore(4, item) as OkNegotiatedContentResult<PutStoreResponse>;
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(StatusCodeResult));
-            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode);
+            Assert.AreEqual(true, result.Content.Status);
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<PutStoreResponse>));
         }
 
-        private Store GetTestStore()
+        [TestMethod]
+        public async Task PutStore_ShouldReturnBadRequest()
         {
-            return new Store { Id = 4, Name = "Store #4", City = "Bydgosz", Country = "Poland" };
+            var controller = new StoresController(GetTestDbContext());
+            var item = GetTestStore();
+
+            var result = await controller.PutStore(5, item) as BadRequestResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
+        private PutStoreDto GetTestStore()
+        {
+            return new PutStoreDto { Id = 4, Name = "Store #4", City = "Toruń", Country = "Poland" };
         }
 
         private static TestStoreStatsDbContext GetTestDbContext()
@@ -56,7 +69,7 @@ namespace StoreStatsApi.Test
             db.Stores.Add(new Store { Id = 1, Name = "Store #1", City = "Castle Douglas", Country = "Scotland" });
             db.Stores.Add(new Store { Id = 2, Name = "Store #2", City = "Newton Stewart", Country = "Scotland" });
             db.Stores.Add(new Store { Id = 3, Name = "Store #3", City = "Lockerbie", Country = "Scotland" });
-            db.Stores.Add(new Store { Id = 4, Name = "Store #4", City = "Bydgosz", Country = "Poland" });
+            db.Stores.Add(new Store { Id = 4, Name = "Store #4", City = "Bydgoszcz", Country = "Poland" });
             return db;
         }
     }
