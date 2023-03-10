@@ -55,10 +55,13 @@
     <Compile Include="Migrations\202303101446491_Init.designer.cs">
       <DependentUpon>202303101446491_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303102042118_ContextUpdate.cs" />
+    <Compile Include="Migrations\202303102042118_ContextUpdate.designer.cs">
+      <DependentUpon>202303102042118_ContextUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\IStoreStatsDbContext.cs" />
-    <Compile Include="Models\StoreDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\StoreStatsDbContext.cs" />
@@ -70,6 +73,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202303101446491_Init.resx">
       <DependentUpon>202303101446491_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303102042118_ContextUpdate.resx">
+      <DependentUpon>202303102042118_ContextUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
