@@ -21,8 +21,11 @@ namespace StoreStats.API.Models
             Status = true;
         }
 
-        public void GetStatistics(Store store)
+        public void LoadStatistics(Store store)
         {
+            if (store == null || store.Entries == null)
+                return;
+
             Statistics = store.Entries
                 .GroupBy(x => x.EntryDate.Date)
                 .Select(x => new Statistic { Date = x.Key, Count = x.Count() })

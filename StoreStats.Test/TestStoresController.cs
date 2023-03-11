@@ -15,6 +15,10 @@ namespace StoreStatsApi.Test
     [TestClass]
     public class TestStoresController
     {
+        // todo: test other controllers
+        // todo: exception handling with setting BaseResponse's Status and Message properties
+
+
         [TestMethod]
         public async Task GetStore_ShouldFindExistingStore()
         {
@@ -99,12 +103,12 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public void PutStore_NoName_ValidationFailes()
         {
-            var sut = GetPutStoreDto();
-            sut.Name = null;
-            var context = new ValidationContext(sut, null, null);
+            var item = GetPutStoreDto();
+            item.Name = null;
+            var context = new ValidationContext(item, null, null);
             var results = new List<ValidationResult>();
 
-            var isModelStateValid = Validator.TryValidateObject(sut, context, results, true);
+            var isModelStateValid = Validator.TryValidateObject(item, context, results, true);
 
             Assert.IsFalse(isModelStateValid);
         }
@@ -114,7 +118,6 @@ namespace StoreStatsApi.Test
         {
             var controller = new StoresController(GetTestDbContext());
             CreateStoreDto item = GetCreateStoreDto();
-            item.Name = null;
 
             var result = await controller.PostStore(item) as CreatedAtRouteNegotiatedContentResult<PostStoreResponse>;
 
@@ -125,12 +128,12 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public void CreateStoreDto_NoName_ValidationFails()
         {
-            var sut = GetCreateStoreDto();
-            sut.Name = null;
-            var context = new ValidationContext(sut, null, null);
+            var item = GetCreateStoreDto();
+            item.Name = null;
+            var context = new ValidationContext(item, null, null);
             var results = new List<ValidationResult>();
 
-            var isModelStateValid = Validator.TryValidateObject(sut, context, results, true);
+            var isModelStateValid = Validator.TryValidateObject(item, context, results, true);
 
             Assert.IsFalse(isModelStateValid);
         }

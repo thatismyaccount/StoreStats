@@ -16,6 +16,7 @@ namespace StoreStatsApi.Test.Contexts
         public TestStoreStatsDbContext()
         {
             this.Stores = new TestStoreDbSet();
+            this.Entries = new TestEntryDbStore();
         }
 
         public int SaveChanges()
@@ -31,5 +32,7 @@ namespace StoreStatsApi.Test.Contexts
         public void MarkAsModified(Store item) { }
         public void MarkAsModified(Entry item) { }
         public void Dispose() { }
+
+        public void LoadEntriesForStore(Store store, DateTime startDate, DateTime endDate) { }
     }
 }

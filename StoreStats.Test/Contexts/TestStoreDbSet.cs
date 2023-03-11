@@ -11,12 +11,12 @@ namespace StoreStatsApi.Test.Contexts
     {
         public override Store Find(params object[] keyValues)
         {
-            return this.SingleOrDefault(product => product.Id == (int)keyValues.Single());
+            return this.SingleOrDefault(store => store.Id == (int)keyValues.Single());
         }
 
         public override Task<Store> FindAsync(params object[] keyValues)
         {
-            return Task.FromResult(this.SingleOrDefault(product => product.Id == (int)keyValues.Single()));
+            return Task.FromResult(this.SingleOrDefault(store => store.Id == (int)keyValues.Single()));
         }
     }
 }

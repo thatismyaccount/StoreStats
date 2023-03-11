@@ -17,10 +17,7 @@ namespace StoreStats.API.Controllers
     public class EntriesController : ApiController
     {
         private readonly IStoreStatsDbContext db = new StoreStatsDbContext();
-        public EntriesController()
-        {
-
-        }
+        public EntriesController() { }
         public EntriesController(IStoreStatsDbContext dbContext)
         {
             db = dbContext;

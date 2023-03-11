@@ -68,8 +68,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\TestDbSet.cs" />
+    <Compile Include="Contexts\TestEntryDbStore.cs" />
     <Compile Include="Contexts\TestStoreDbSet.cs" />
     <Compile Include="Contexts\TestStoreStatsDbContext.cs" />
+    <Compile Include="TestEntriesController.cs" />
+    <Compile Include="TestStatisticsController.cs" />
     <Compile Include="TestStoresController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

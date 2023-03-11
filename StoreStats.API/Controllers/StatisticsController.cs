@@ -34,17 +34,16 @@ namespace StoreStats.API.Controllers
         {
             Store store = await db.Stores.FindAsync(id);
 
-            db.LoadEntriesForStore(store, startDate, endDate);
-            //var items = await db.Entries
-            //    .Where(x => x.StoreId == store.Id && x.EntryDate < endDate && x.EntryDate > startDate)
-            //    .ToListAsync();
-
             if (store == null)
             {
                 return NotFound();
             }
+
+            db.LoadEntriesForStore(store, startDate, endDate);
+
             var response = new GetStatisticsResponse(store);
-            response.GetStatistics(store);
+            response.LoadStatistics(store);
+
             return Ok(response);
         }
     }
