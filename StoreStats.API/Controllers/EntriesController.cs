@@ -9,18 +9,18 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using StoreStats.API.Models;
 using StoreStats.Data.Models;
+using StoreStats.Data.Services;
 
 namespace StoreStats.API.Controllers
 {
     public class EntriesController : ApiController
     {
-        private readonly IStoreStatsDbContext db = new StoreStatsDbContext();
+        private readonly IEntriesService _service;
         public EntriesController() { }
-        public EntriesController(IStoreStatsDbContext dbContext)
+        public EntriesController(IEntriesService service)
         {
-            db = dbContext;
+            _service = service;
         }
 
         // POST: api/Entries
@@ -31,20 +31,10 @@ namespace StoreStats.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var dbEntry = entry.ToEntry();
-            db.Entries.Add(dbEntry);
-            await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = dbEntry.Id }, new CreateEntryResponse());
-        }
+            var response = await _service.PostEntryAsync(entry);
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return CreatedAtRoute("Entries", new { id = 0 }, response);
         }
     }
 }

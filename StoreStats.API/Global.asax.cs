@@ -11,6 +11,7 @@ namespace StoreStats.API
     {
         protected void Application_Start()
         {
+            UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }

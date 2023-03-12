@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace StoreStats.API.Models
+namespace StoreStats.Data.Models
 {
-    public class PutStoreDto
+    public class CreateStoreDto
     {
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string City { get; set; }
@@ -19,7 +19,6 @@ namespace StoreStats.API.Models
         {
             return new Store
             {
-                Id = Id,
                 Name = Name,
                 City = City,
                 Country = Country

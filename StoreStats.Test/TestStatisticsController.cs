@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StoreStats.API.Controllers;
-using StoreStats.API.Models;
 using StoreStats.Data.Models;
+using StoreStats.Data.Services;
 using StoreStatsApi.Test.Contexts;
 using System;
 using System.Collections.Generic;
@@ -18,8 +18,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task GetStatistics_ShouldReturnOk()
         {
-            var testDbContext = GetTestDbContext();
-            var controller = new StatisticsController(testDbContext);
+            var controller = CreateController();
 
             var result = await controller.GetStatistics(1, DateTime.MinValue, DateTime.MaxValue) as OkNegotiatedContentResult<GetStatisticsResponse>;
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<GetStatisticsResponse>));
@@ -28,8 +27,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task GetStatistics_ShouldReturnProperStatisticsObject()
         {
-            var testDbContext = GetTestDbContext();
-            var controller = new StatisticsController(testDbContext);
+            var controller = CreateController();
 
             var result = await controller.GetStatistics(1, DateTime.MinValue, DateTime.MaxValue) as OkNegotiatedContentResult<GetStatisticsResponse>;
             
@@ -43,8 +41,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task GetStatistics_ShouldReturnProperStatisticsCollection()
         {
-            var testDbContext = GetTestDbContext();
-            var controller = new StatisticsController(testDbContext);
+            var controller = CreateController();
 
             var result = await controller.GetStatistics(4, DateTime.MinValue, DateTime.MaxValue) as OkNegotiatedContentResult<GetStatisticsResponse>;
 
@@ -57,10 +54,19 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task GetStatistics_ShouldNotFindProduct()
         {
-            var controller = new StatisticsController(GetTestDbContext());
+            var testDbContext = GetTestDbContext();
+            var statisticService = new StatisticsService(testDbContext);
+            var controller = new StatisticsController(statisticService);
 
             var result = await controller.GetStatistics(999, DateTime.MinValue, DateTime.MaxValue);
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
+        }
+
+        private static StatisticsController CreateController()
+        {
+            var testDbContext = GetTestDbContext();
+            var statisticService = new StatisticsService(testDbContext);
+            return new StatisticsController(statisticService);
         }
 
         private static TestStoreStatsDbContext GetTestDbContext()

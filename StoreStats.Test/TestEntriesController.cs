@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StoreStats.API.Controllers;
-using StoreStats.API.Models;
 using StoreStats.Data.Models;
+using StoreStats.Data.Services;
 using StoreStatsApi.Test.Contexts;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task PostStore_ShouldReturnCreatedAt()
         {
-            var controller = new EntriesController(GetTestDbContext());
+            var controller = CreateController();
             var item = GetCreateEntryDto();
 
             var result = await controller.PostEntry(item) as CreatedAtRouteNegotiatedContentResult<CreateEntryResponse>;
@@ -27,23 +27,10 @@ namespace StoreStatsApi.Test
             Assert.IsInstanceOfType(result, typeof(CreatedAtRouteNegotiatedContentResult<CreateEntryResponse>));
         }
 
-        //[TestMethod]
-        //public void CreateStoreDto_NoName_ValidationFails()
-        //{
-        //    var item = GetCreateEntryDto();
-
-        //    var context = new ValidationContext(item, null, null);
-        //    var results = new List<ValidationResult>();
-
-        //    var isModelStateValid = Validator.TryValidateObject(item, context, results, true);
-
-        //    Assert.IsFalse(isModelStateValid);
-        //}
-
         [TestMethod]
         public async Task PostStore_ValidationFails_ShouldReturnBadRequest()
         {
-            var controller = new EntriesController(GetTestDbContext());
+            var controller = CreateController();
             var item = GetCreateEntryDto();
 
             controller.ModelState.AddModelError("model", "invalid");
@@ -52,6 +39,13 @@ namespace StoreStatsApi.Test
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(InvalidModelStateResult));
+        }
+
+        private static EntriesController CreateController()
+        {
+            var testDbContext = GetTestDbContext();
+            var entriesService = new EntriesService(testDbContext);
+            return new EntriesController(entriesService);
         }
 
         private static CreateEntryDto GetCreateEntryDto()

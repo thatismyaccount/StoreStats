@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace StoreStats.API.Models
+namespace StoreStats.Data.Models
 {
     public class Statistic
     {

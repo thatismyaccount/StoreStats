@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StoreStats.API.Controllers;
-using StoreStats.API.Models;
 using StoreStats.Data.Models;
+using StoreStats.Data.Services;
 using StoreStatsApi.Test.Contexts;
 using System;
 using System.Collections.Generic;
@@ -15,15 +15,10 @@ namespace StoreStatsApi.Test
     [TestClass]
     public class TestStoresController
     {
-        // todo: test other controllers
-        // todo: exception handling with setting BaseResponse's Status and Message properties
-
-
         [TestMethod]
         public async Task GetStore_ShouldFindExistingStore()
         {
-            var testDbContext = GetTestDbContext();
-            var controller = new StoresController(testDbContext);
+            var controller = CreateController();
 
             var result = await controller.GetStore(1);
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<GetStoreResponse>));
@@ -32,7 +27,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task GetStore_ShouldNotFindProduct()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
 
             var result = await controller.GetStore(999);
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
@@ -42,7 +37,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task DeleteStore_ShouldReturnOk()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
 
             var result = await controller.DeleteStore(4) as OkNegotiatedContentResult<DeleteStoreResponse>;
 
@@ -54,7 +49,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task DeleteStore_ShouldReturnNotFound()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
 
             var result = await controller.DeleteStore(99) as NotFoundResult;
 
@@ -65,7 +60,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task PutStore_ShouldReturnStatusCode()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
             var item = GetPutStoreDto();
 
             var result = await controller.PutStore(4, item) as OkNegotiatedContentResult<PutStoreResponse>;
@@ -78,7 +73,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task PutStore_DifferentIds_ShouldReturnBadRequest()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
             var item = GetPutStoreDto();
 
             var result = await controller.PutStore(5, item) as BadRequestResult;
@@ -90,7 +85,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task PutStoreDto_ValidationFailed_ShouldReturnBadRequest()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
             var item = GetPutStoreDto();
             controller.ModelState.AddModelError("test", "test");
 
@@ -116,7 +111,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task PostStore_ShouldReturnCreatedAt()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
             CreateStoreDto item = GetCreateStoreDto();
 
             var result = await controller.PostStore(item) as CreatedAtRouteNegotiatedContentResult<PostStoreResponse>;
@@ -141,7 +136,7 @@ namespace StoreStatsApi.Test
         [TestMethod]
         public async Task PostStore_ValidationFails_ShouldReturnBadRequest()
         {
-            var controller = new StoresController(GetTestDbContext());
+            var controller = CreateController();
             CreateStoreDto item = GetCreateStoreDto();
 
             controller.ModelState.AddModelError("test", "test");
@@ -150,6 +145,13 @@ namespace StoreStatsApi.Test
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(InvalidModelStateResult));
+        }
+
+        private static StoresController CreateController()
+        {
+            var testDbContext = GetTestDbContext();
+            var service = new StoresService(testDbContext);
+            return new StoresController(service);
         }
 
         private PutStoreDto GetPutStoreDto()

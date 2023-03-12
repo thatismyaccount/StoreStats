@@ -1,5 +1,5 @@
-﻿using StoreStats.API.Models;
-using StoreStats.Data.Models;
+﻿using StoreStats.Data.Models;
+using StoreStats.Data.Services;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -14,27 +14,23 @@ namespace StoreStats.API.Controllers
 {
     public class StoresController : ApiController
     {
-        private readonly IStoreStatsDbContext db = new StoreStatsDbContext();
-        public StoresController()
+        private readonly IStoresService _service;
+        public StoresController(IStoresService service)
         {
-
-        }
-        public StoresController(IStoreStatsDbContext dbContext)
-        {
-            db = dbContext;
+            _service = service;
         }
 
         // GET: api/store/5
         [ResponseType(typeof(GetStoreResponse))]
         public async Task<IHttpActionResult> GetStore(int id)
         {
-            Store store = await db.Stores.FindAsync(id);
-            if (store == null)
+            GetStoreResponse response = await _service.GetStoreAsync(id);
+            if (response == null)
             {
                 return NotFound();
             }
 
-            return Ok(new GetStoreResponse(store));
+            return Ok(response);
         }
 
         // PUT: api/store/5
@@ -51,29 +47,9 @@ namespace StoreStats.API.Controllers
                 return BadRequest();
             }
 
-            var dbStore = store.ToStore();
-
-            db.MarkAsModified(dbStore);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StoreExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Ok(new PutStoreResponse(dbStore));
+            var response = await _service.PutStoreAsync(id, store);
+            return Ok(response);
         }
-
         // POST: api/store
         [ResponseType(typeof(PostStoreResponse))]
         public async Task<IHttpActionResult> PostStore(CreateStoreDto store)
@@ -83,41 +59,21 @@ namespace StoreStats.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var dbStore = store.ToStore();
-            db.Stores.Add(dbStore);
-            await db.SaveChangesAsync();
+            var response = await _service.PostStoreAsync(store);
 
-            return CreatedAtRoute("Stores", new { id = dbStore.Id }, new PostStoreResponse(dbStore));
+            return CreatedAtRoute("Stores", new { id = response.Id }, response);
         }
 
         // DELETE: api/store/5
         [ResponseType(typeof(DeleteStoreResponse))]
         public async Task<IHttpActionResult> DeleteStore(int id)
         {
-            Store store = await db.Stores.FindAsync(id);
-            if (store == null)
+            var response = await _service.DeleteStoreAsync(id);
+            if (response == null)
             {
                 return NotFound();
             }
-
-            db.Stores.Remove(store);
-            await db.SaveChangesAsync();
-
-            return Ok(new DeleteStoreResponse(store));
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool StoreExists(int id)
-        {
-            return db.Stores.Count(e => e.Id == id) > 0;
+            return Ok(response);
         }
     }
 }
