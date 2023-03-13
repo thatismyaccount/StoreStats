@@ -28,7 +28,7 @@ namespace StoreStats.Data.Models
             Entry(store)
                 .Collection(x => x.Entries)
                 .Query()
-                .Where(x => x.EntryDate < endDate && x.EntryDate > startDate)
+                .Where(x => x.EntryDate <= endDate.Date && x.EntryDate >= startDate.Date)
                 .Load();            
         }
     }

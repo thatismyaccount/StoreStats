@@ -1,4 +1,5 @@
 ﻿using StoreStats.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,12 +22,13 @@ namespace StoreStats.Data.Models
             Status = true;
         }
 
-        public void LoadStatistics(Store store)
+        public void LoadStatistics(Store store, DateTime startDate, DateTime endDate)
         {
             if (store == null || store.Entries == null)
                 return;
 
             Statistics = store.Entries
+                .Where(x => x.EntryDate.Date >= startDate.Date && x.EntryDate.Date <= endDate.Date)
                 .GroupBy(x => x.EntryDate.Date)
                 .Select(x => new Statistic { Date = x.Key, Count = x.Count() })
                 .OrderBy(x => x.Date)

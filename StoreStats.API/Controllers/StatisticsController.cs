@@ -20,11 +20,6 @@ namespace StoreStats.API.Controllers
     {
         private readonly IStatisticsService service;
 
-        //todo: move logic from controllers to services in data layer https://www.freecodecamp.org/news/an-awesome-guide-on-how-to-build-restful-apis-with-asp-net-core-87b818123e28/
-        //todo: consider moving response models and dtos from StoreStats.API to StoreStats.Data
-        //todo: register IServices in ioc so controllers can get it upon creation https://learn.microsoft.com/en-us/aspnet/web-api/overview/advanced/dependency-injection
-        //todo: update controllers' tests so they work
-        //
         public StatisticsController(IStatisticsService service)
         {
             this.service = service;

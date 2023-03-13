@@ -27,7 +27,7 @@ namespace StoreStats.Data.Services
 
             db.LoadEntriesForStore(store, startDate, endDate);
 
-            response.LoadStatistics(store);
+            response.LoadStatistics(store, startDate, endDate);
             return response;
         }
 
