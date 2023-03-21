@@ -30,10 +30,5 @@ namespace StoreStats.Data.Services
             response.LoadStatistics(store, startDate, endDate);
             return response;
         }
-
-        public void Dispose()
-        {
-            db?.Dispose();
-        }
     }
 }

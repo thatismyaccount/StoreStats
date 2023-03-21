@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StoreStats.Data.Services
 {
-    public class EntriesService : IEntriesService, IDisposable
+    public class EntriesService : IEntriesService
     {
         private readonly IStoreStatsDbContext db;
         public EntriesService(IStoreStatsDbContext dbContext)
@@ -22,11 +22,6 @@ namespace StoreStats.Data.Services
             await db.SaveChangesAsync();
 
             return new CreateEntryResponse();
-        }
-
-        public void Dispose()
-        {
-            db?.Dispose();
         }
     }
 }

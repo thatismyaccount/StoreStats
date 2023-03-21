@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StoreStats.Data.Services
 {
-    public class StoresService : IDisposable, IStoresService
+    public class StoresService : IStoresService
     {
         private readonly IStoreStatsDbContext db;
         public StoresService(IStoreStatsDbContext dbContext)
@@ -80,11 +80,6 @@ namespace StoreStats.Data.Services
         private bool StoreExists(int id)
         {
             return db.Stores.Count(e => e.Id == id) > 0;
-        }
-
-        public void Dispose()
-        {
-            db?.Dispose();
         }
     }
 }
